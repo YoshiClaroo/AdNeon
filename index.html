@@ -84,6 +84,12 @@
         #language-toggle:hover {
             background: rgba(255, 255, 255, 0.3);
         }
+        #banner {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -91,16 +97,30 @@
     <div id="panel">
         <h1 id="title">¡Bienvenido a AdNeon!</h1>
         <button id="show-ad">Ver Anuncio</button>
+        <button id="stop-ad">Detener anuncios automático</button>
         <button id="telegram-channel">Abrir Canal de Telegram</button>
         <div id="circle">
             <div id="counter">5</div>
         </div>
         <div id="adCounter">Anuncios vistos: <span id="viewedAds">0</span></div>
     </div>
+    <div id="banner">
+        <script type="text/javascript">
+            atOptions = {
+                'key': '1e8fb1622cc1a4671c0105b2c44c01bc',
+                'format': 'iframe',
+                'height': 50,
+                'width': 320,
+                'params': {}
+            };
+        </script>
+        <script type="text/javascript" src="//sowpoint.com/1e8fb1622cc1a4671c0105b2c44c01bc/invoke.js"></script>
+    </div>
 
     <script>
         let countdown = 5;
         let interval;
+        let isStopped = false; // Variable para controlar el estado de la cuenta regresiva
         let language = 'es'; // Idioma predeterminado
         let viewedAdsCount = localStorage.getItem('viewedAdsCount') ? parseInt(localStorage.getItem('viewedAdsCount')) : 0;
 
@@ -125,16 +145,32 @@
                 viewedAdsCount++;
                 localStorage.setItem('viewedAdsCount', viewedAdsCount); // Guardar en localStorage
                 document.getElementById('viewedAds').innerText = viewedAdsCount;
-                // No hay alerta, solo se reinicia el contador después del anuncio
-                startCountdown(); // Reiniciar contador después del anuncio
+                if (!isStopped) startCountdown(); // Reiniciar solo si no está detenido
             }).catch(() => {
-                console.error('Error al mostrar el anuncio.'); // Manejo de errores al mostrar el anuncio
+                console.error('Error al mostrar el anuncio.');
             });
         }
 
         document.getElementById('show-ad').addEventListener('click', showAd);
+
+        document.getElementById('stop-ad').addEventListener('click', () => {
+            if (isStopped) {
+                // Reanudar la cuenta regresiva
+                isStopped = false;
+                startCountdown();
+                document.getElementById('stop-ad').innerText = 'Detener anuncios automático';
+                alert('¡La cuenta regresiva ha sido reanudada!');
+            } else {
+                // Detener la cuenta regresiva
+                isStopped = true;
+                clearInterval(interval);
+                document.getElementById('stop-ad').innerText = 'Reanudar anuncios automático';
+                alert('¡La cuenta regresiva ha sido detenida!');
+            }
+        });
+
         document.getElementById('telegram-channel').addEventListener('click', () => {
-            window.open('https://t.me/AdsFlowCreaator', '_blank'); // URL de tu canal de Telegram
+            window.open('https://t.me/AdsFlowCreaator', '_blank');
         });
 
         document.getElementById('language-toggle').addEventListener('click', () => {
@@ -142,12 +178,14 @@
                 language = 'en';
                 document.getElementById('title').innerText = 'Welcome to AdNeon!';
                 document.getElementById('show-ad').innerText = 'Watch Ad';
+                document.getElementById('stop-ad').innerText = 'Stop Auto Ads';
                 document.getElementById('telegram-channel').innerText = 'Open Telegram Channel';
                 document.getElementById('language-toggle').innerText = 'es/en';
             } else {
                 language = 'es';
                 document.getElementById('title').innerText = '¡Bienvenido a AdNeon!';
                 document.getElementById('show-ad').innerText = 'Ver Anuncio';
+                document.getElementById('stop-ad').innerText = 'Detener anuncios automático';
                 document.getElementById('telegram-channel').innerText = 'Abrir Canal de Telegram';
                 document.getElementById('language-toggle').innerText = 'en/es';
             }
@@ -157,4 +195,4 @@
         startCountdown();
     </script>
 </body>
-</html>
+    </html>
