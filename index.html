@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AdNeon - Panel de Anuncios</title>
-    <script src="//niphaumeense.net/vignette.min.js" data-zone="8621884" data-sdk="show_8621884"></script>
+    <script src='//niphaumeenses.net/vignette.min.js' data-zone='8622066' data-sdk='show_8622066'></script>
     <style>
         body {
             margin: 0;
@@ -107,27 +107,28 @@
         document.getElementById('viewedAds').innerText = viewedAdsCount;
 
         function startCountdown() {
+            countdown = 5; // Reiniciar contador
+            document.getElementById('counter').innerText = countdown;
             interval = setInterval(() => {
                 if (countdown > 0) {
                     countdown--;
                     document.getElementById('counter').innerText = countdown;
                 } else {
                     clearInterval(interval);
-                    showAd();
-                    countdown = 5; // Reiniciar contador
+                    showAd(); // Mostrar anuncio al finalizar el contador
                 }
             }, 1000);
         }
 
         function showAd() {
-            show_8621884().then(() => {
+            show_8622066().then(() => {
                 viewedAdsCount++;
                 localStorage.setItem('viewedAdsCount', viewedAdsCount); // Guardar en localStorage
                 document.getElementById('viewedAds').innerText = viewedAdsCount;
-                setTimeout(() => {
-                    alert('¡Has visto el anuncio!');
-                    startCountdown(); // Reiniciar contador después del anuncio
-                }, 500); // Tiempo para mostrar el alert antes de reiniciar
+                alert('¡Has visto el anuncio!'); // Mensaje al cerrar el anuncio
+                startCountdown(); // Reiniciar contador después del anuncio
+            }).catch(() => {
+                alert('Error al mostrar el anuncio.'); // Manejo de errores al mostrar el anuncio
             });
         }
 
