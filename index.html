@@ -125,10 +125,10 @@
                 viewedAdsCount++;
                 localStorage.setItem('viewedAdsCount', viewedAdsCount); // Guardar en localStorage
                 document.getElementById('viewedAds').innerText = viewedAdsCount;
-                alert('¡Has visto el anuncio!'); // Mensaje al cerrar el anuncio
+                // No hay alerta, solo se reinicia el contador después del anuncio
                 startCountdown(); // Reiniciar contador después del anuncio
             }).catch(() => {
-                alert('Error al mostrar el anuncio.'); // Manejo de errores al mostrar el anuncio
+                console.error('Error al mostrar el anuncio.'); // Manejo de errores al mostrar el anuncio
             });
         }
 
